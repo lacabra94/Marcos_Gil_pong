@@ -5,54 +5,86 @@ using UnityEngine;
 
 public class BallControler : MonoBehaviour
 {
-    public float velocidad = 10f;
+    public float velocity = 10f;
     public GameManager gameManager;
-    private Rigidbody2D rb;
 
-    // Start is called before the first frame update
+    Rigidbody2D _rb;
+    float _lastHorizontalDirection = 1f;
+
     void Start()
     {
-       rb = this.gameObject.GetComponent<Rigidbody2D>();
-       
-       LaunchBall();
-
+        _rb = GetComponent<Rigidbody2D>();
+        LaunchBall(0);
     }
 
-    // Update is called once per frame
     void FixedUpdate()
     {
-        if (rb.velocity.magnitude > velocidad)
+        if (_rb.velocity.magnitude > velocity)
         {
-            rb.velocity = rb.velocity.normalized * velocidad;
+            _rb.velocity = _rb.velocity.normalized * velocity;
+        }
+
+        if (Mathf.Abs(_rb.velocity.x) >= velocity * 0.3f)
+        {
+            _lastHorizontalDirection = Mathf.Sign(_rb.velocity.x);
+        }
+        else
+        {
+            float yDirection = Mathf.Sign(_rb.velocity.y);
+
+            if (yDirection == 0f)
+            {
+                yDirection = 1f;
+            }
+
+            float minX = 0.3f;
+            float y = Mathf.Sqrt(1f - minX * minX);
+
+            _rb.velocity = new Vector2(
+                _lastHorizontalDirection * minX,
+                yDirection * y
+            ) * velocity;
         }
     }
 
-    void LaunchBall()
+    void LaunchBall(int dir)
     {
-        bool isRight = false;
-        if (Random.value > 0.5f)
+        if (dir == 0)
         {
-            isRight = true;
+            _lastHorizontalDirection = Random.value > 0.5f ? 1f : -1f;
         }
-
-        float xVelocity = -1;
-        if (isRight == true)
+        else
         {
-            xVelocity = 1;
+            _lastHorizontalDirection = dir;
         }
+        float yVelocity = Random.Range(-0.7f, 0.7f);
 
-        float yVelocity = Random.Range(-1f, 1f);
-        rb.velocity = new Vector2(xVelocity * velocidad, yVelocity * velocidad);
-
+        _rb.velocity = new Vector2(
+            _lastHorizontalDirection,
+            yVelocity
+        ).normalized * velocity;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log("Ball hit");
+        if(collision.gameObject.CompareTag("Wall_R"))
+        {
+            gameManager.PuntosP1++;
+            LaunchBall(-1);
+        }
+        if (collision.gameObject.CompareTag("Wall_L"))
+        {
+            gameManager.PuntosP2++;
+            LaunchBall(1);
+        }
 
-        gameManager.PuntosP1++;
-        gameManager.PuntosP2++;
+        if (collision.gameObject.CompareTag("Wall_R") || collision.gameObject.CompareTag("Wall_L"))
+        {
+            _rb.transform.position = new Vector3(0, 0, 0);
+        }
+
         gameManager.UpdatePointsText();
+
     }
 
 }

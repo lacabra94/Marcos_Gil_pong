@@ -376,8 +376,8 @@ GameObject:
   - component: {fileID: 115783335}
   - component: {fileID: 115783334}
   m_Layer: 0
-  m_Name: Floor (2)
-  m_TagString: Untagged
+  m_Name: WallR
+  m_TagString: Wall_R
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1073,8 +1073,8 @@ GameObject:
   - component: {fileID: 612809762}
   - component: {fileID: 612809761}
   m_Layer: 0
-  m_Name: Floor (1)
-  m_TagString: Untagged
+  m_Name: WallL
+  m_TagString: Wall_L
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1572,7 +1572,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c0907163930a984b8affcab4cea2b33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  velocidad: 20
+  velocity: 20
   gameManager: {fileID: 1288641002}
 --- !u!1 &1288641000
 GameObject:
@@ -1618,8 +1618,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c3d3f1563427e3468c988d80e64eaa4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PuntosP1: 6
-  PuntosP2: 7
+  PuntosP1: 0
+  PuntosP2: 0
   Marcador: 00|00
   marcadorText: {fileID: 107283595}
 --- !u!1 &1305195164
